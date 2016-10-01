@@ -1,6 +1,6 @@
 <?php
 /**
- *  Laravel-CreatedByPolicy (http://github.com/malhal/Laravel-CreatedByPolicy)
+ *  Laravel-Geographical (http://github.com/malhal/Laravel-Geographical)
  *
  *  Created by Malcolm Hall on 1/10/2016.
  *  Copyright © 2016 Malcolm Hall. All rights reserved.
