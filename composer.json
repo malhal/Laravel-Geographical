@@ -1,0 +1,35 @@
+{
+    "name": "malhal/laravel-geographical",
+    "description": "Easily add longitude and latitude columns to your records and use inherited functionality for calculating distances",
+    "keywords": ["laravel", "framework", "latitude", "longitude", "user", "models", "Geographical", "Laravel Geographical", "Laravel-Geographical", "Malcolm Hall", "malhal"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Malcolm Hall",
+            "email": "composer@malcolmhall.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.4",
+        "laravel/framework": "5.3.*"
+    },
+    "require-dev": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Malhal\\Geographical\\": "src/"
+        }
+    },
+    "autoload-dev": {
+    },
+    "config": {
+        "preferred-install": "dist"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
