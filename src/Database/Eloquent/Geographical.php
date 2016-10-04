@@ -1,12 +1,12 @@
 <?php
 /**
- *  Laravel-Geographical (http://github.com/malhal/Laravel-Geographical)
+ *  Laravel-CreatedByPolicy (http://github.com/malhal/Laravel-CreatedByPolicy)
  *
- *  Created by Malcolm Hall on 1/10/2016.
+ *  Created by Malcolm Hall on 4/10/2016.
  *  Copyright © 2016 Malcolm Hall. All rights reserved.
  */
 
-namespace Malhal\Geographical;
+namespace Malhal\Database\Eloquent;
 
 trait Geographical
 {
