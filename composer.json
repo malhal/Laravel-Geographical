@@ -17,7 +17,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Malhal\\": "src/"
+            "Malhal\\Geographical\\": "src/"
         }
     },
     "autoload-dev": {
