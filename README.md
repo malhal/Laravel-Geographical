@@ -1,24 +1,59 @@
-# Laravel-Geographical
+# Laravel Geographical
 Easily add longitude and latitude columns to your records and use inherited functionality for calculating distances.
 
 First either update your database or add this to a migration for each model:
 
-    $table->double('longitude');
-    $table->double('latitude');
+```php
+$table->double('longitude');
+$table->double('latitude');
+```
 
 Finally in your model use:
+```php
+use Geographical;
+```
 
-    use Geographical;
+### 1. Distance
 
-Now to query by distance use this:
+Find the distance to all the entries in your table from a particular location.
 
-    $query->getModel()->newDistanceQuery($request->query('lat'), $request->query('lon'))->orderBy('miles', 'asc')->get();
-    
+```php
+$query = Model::distance($latitude, $longitude);
+$asc = $query->orderBy('distance', 'ASC')->get();
+ ```
+
+### 2. Geofence
+
+Find all the entries in your table inside a circular geo-fence.
+
+```php
+$query = Model::geofence($latitude, $longitude, $inner_radius, $outer_radius);
+$all = $query->get();
+```
+
+### Units
+
+The default unit of distance is **miles**. You can change it to **kilometers** by putting this in your model
+```php
+protected static $kilometers = true;
+```
+
+### Notes
+
+1. The method returns a `Eloquent\Builder` object so that you can add optional conditions if you want.
+2. You can use `distance` as an aggregate column in the result.
+(Aggregate columns cannot be used in `WHERE`, use `HAVING` to execute any condition.)
+3. If you use different column names for latitude and longitude, mention them in the Model.php
+```php
+const LATITUDE  = 'lat';
+const $LONGITUDE = 'lng';
+```
+
 ## Installation
 
-[PHP](https://php.net) 5.6.4+ and [Laravel](http://laravel.com) 5.3+ are required.
+[PHP](https://php.net) 5.6.4+ and [Laravel](http://laravel.com) 5+ are required.
 
-To get the latest version of Laravel CreatedBy, simply require the project using [Composer](https://getcomposer.org):
+To get the latest version of Laravel Geographical, simply require the project using [Composer](https://getcomposer.org):
 
 ```bash
 $ composer require malhal/laravel-geographical

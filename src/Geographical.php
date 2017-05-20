@@ -8,41 +8,55 @@
 
 namespace Malhal\Geographical;
 
+use Illuminate\Database\Eloquent\Builder;
+
 trait Geographical
 {
-    public function newDistanceQuery($lat, $lon, $kilometers = false){
-
-        $unit = $kilometers ? 'kilometers' : 'miles';
-
-        $query = $this->newQuery();
-
+    /**
+     * @param Builder $query
+     * @param float $latitude Latitude
+     * @param float $longitude Longitude
+     * @return Builder
+     */
+    public function scopeDistance($query, $latitude, $longitude)
+    {
         $latName = $this->getQualifiedLatitudeColumn();
         $lonName = $this->getQualifiedLongitudeColumn();
-
         $query->select($this->getTable() . '.*');
+        $sql = "((ACOS(SIN(? * PI() / 180) * SIN(" . $latName . " * PI() / 180) + COS(? * PI() / 180) * COS(" .
+            $latName . " * PI() / 180) * COS((? - " . $lonName . ") * PI() / 180)) * 180 / PI()) * 60 * ?) as distance";
 
-        $sql = "((ACOS(SIN(? * PI() / 180) * SIN(" . $latName . " * PI() / 180) + COS(? * PI() / 180) * COS(" . $latName . " * PI() / 180) * COS((? - " . $lonName . ") * PI() / 180)) * 180 / PI()) * 60 * ?) as " . $unit;
-
-        if($kilometers){
-            $query->selectRaw($sql, [$lat, $lat, $lon, 1.1515 * 1.609344]);
+        $kilometers = false;
+        if (property_exists(static::class, 'kilometers')) {
+            $kilometers = static::$kilometers;
         }
-        else{
+
+        if ($kilometers) {
+            $query->selectRaw($sql, [$latitude, $latitude, $longitude, 1.1515 * 1.609344]);
+        } else {
             // miles
-            $query->selectRaw($sql, [$lat, $lat, $lon, 1.1515]);
+            $query->selectRaw($sql, [$latitude, $latitude, $longitude, 1.1515]);
         }
 
         //echo $query->toSql();
         //var_export($query->getBindings());
-
         return $query;
     }
 
-    protected function getQualifiedLatitudeColumn(){
-        return $this->getTable().'.'.$this->getLatitudeColumn();
+    public function scopeGeofence($query, $latitude, $longitude, $inner_radius, $outer_radius)
+    {
+        $query = $this->scopeDistance($query, $latitude, $longitude);
+        return $query->havingRaw('distance BETWEEN ? AND ?', [$inner_radius, $outer_radius]);
     }
 
-    protected function getQualifiedLongitudeColumn(){
-        return $this->getTable().'.'.$this->getLongitudeColumn();
+    protected function getQualifiedLatitudeColumn()
+    {
+        return $this->getTable() . '.' . $this->getLatitudeColumn();
+    }
+
+    protected function getQualifiedLongitudeColumn()
+    {
+        return $this->getTable() . '.' . $this->getLongitudeColumn();
     }
 
     public function getLatitudeColumn()
