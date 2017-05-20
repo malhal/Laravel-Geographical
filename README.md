@@ -46,7 +46,7 @@ protected static $kilometers = true;
 3. If you use different column names for latitude and longitude, mention them in the Model.php
 ```php
 const LATITUDE  = 'lat';
-const $LONGITUDE = 'lng';
+const LONGITUDE = 'lng';
 ```
 
 ## Installation
