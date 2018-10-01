@@ -18,7 +18,10 @@
     "autoload": {
         "psr-4": {
             "Malhal\\Geographical\\": "src/"
-        }
+        },
+        "files": [
+            "src/Geographical.php"
+        ]
     },
     "autoload-dev": {
     },
