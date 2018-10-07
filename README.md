@@ -41,13 +41,19 @@ protected static $kilometers = true;
 ### Notes
 
 1. The method returns a `Eloquent\Builder` object so that you can add optional conditions if you want.
-2. You can use `distance` as an aggregate column in the result.
+2. If you require to select only a certain columns, it can be achieved by using `select()`.
+    ```php
+    Model::select('id', 'name')->distance($latitude, $longitude);
+    ```
+    (`select()` should precede the `distance()/geofence()`)
+3. You can use `distance` as an aggregate column in the result.
 (Aggregate columns cannot be used in `WHERE`, use `HAVING` to execute any condition.)
-3. If you use different column names for latitude and longitude, mention them in the Model.php
-```php
-const LATITUDE  = 'lat';
-const LONGITUDE = 'lng';
-```
+4. If you use different column names for latitude and longitude, mention them in the Model.php
+    ```php
+    const LATITUDE  = 'lat';
+    const LONGITUDE = 'lng';
+    ```
+
 
 ## Installation
 
