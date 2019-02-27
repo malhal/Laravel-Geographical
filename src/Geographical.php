@@ -51,12 +51,12 @@ trait Geographical
 
     protected function getQualifiedLatitudeColumn()
     {
-        return $this->getTable() . '.' . $this->getLatitudeColumn();
+        return $this->getConnection()->getTablePrefix() . $this->getTable() . '.' . $this->getLatitudeColumn();
     }
 
     protected function getQualifiedLongitudeColumn()
     {
-        return $this->getTable() . '.' . $this->getLongitudeColumn();
+        return $this->getConnection()->getTablePrefix() . $this->getTable() . '.' . $this->getLongitudeColumn();
     }
 
     public function getLatitudeColumn()
