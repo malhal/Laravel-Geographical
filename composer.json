@@ -1,5 +1,5 @@
 {
-    "name": "myckhel/laravel-geographical",
+    "name": "malhal/laravel-geographical",
     "description": "Easily add longitude and latitude columns to your records and use inherited functionality for calculating distances",
     "keywords": ["laravel", "framework", "latitude", "longitude", "user", "models", "Geographical", "Laravel Geographical", "Laravel-Geographical", "Malcolm Hall", "malhal"],
     "license": "MIT",
