@@ -22,7 +22,14 @@ trait Geographical
     {
         $latName = $this->getQualifiedLatitudeColumn();
         $lonName = $this->getQualifiedLongitudeColumn();
-        $query->select($this->getTable() . '.*');
+
+        // Adding already selected columns to query, all columns will be selected by default
+        if ($query->getQuery()->columns === null) {
+            $query->select($this->getTable() . '.*');
+        } else {
+            $query->select($query->getQuery()->columns);
+        }
+
         $sql = "((ACOS(SIN(? * PI() / 180) * SIN(" . $latName . " * PI() / 180) + COS(? * PI() / 180) * COS(" .
             $latName . " * PI() / 180) * COS((? - " . $lonName . ") * PI() / 180)) * 180 / PI()) * 60 * ?) as distance";
 
