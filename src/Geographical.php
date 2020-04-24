@@ -23,10 +23,17 @@ trait Geographical
         $latName = $this->getQualifiedLatitudeColumn();
         $lonName = $this->getQualifiedLongitudeColumn();
 
-        // Adding already selected columns to query, all columns will be selected by default
-        if ($query->getQuery()->columns === null) {
+        $allowEmptyColumns = ( property_exists(static::class, 'allow_empty_columns') ) ? static::$allow_empty_columns : false;
+
+        // All columns will be selected by default if we are not allowing empty columns
+        if ( ! $allowEmptyColumns && $query->getQuery()->columns === null )
+        {
             $query->select($this->getTable() . '.*');
-        } else {
+        }
+        
+        // Adding already selected columns to query
+        if ( $query->getQuery()->columns )
+        {
             $query->select($query->getQuery()->columns);
         }
 
