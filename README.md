@@ -31,6 +31,8 @@ $query = Model::geofence($latitude, $longitude, $inner_radius, $outer_radius);
 $all = $query->get();
 ```
 
+> Use `$inner_radius`= 0 & `$outer_radius` = any number in miles that you desire.
+
 ### Units
 
 The default unit of distance is **miles**. You can change it to **kilometers** by putting this in your model
