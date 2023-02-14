@@ -16,16 +16,28 @@ use Illuminate\Database\Eloquent\Builder;
  */
 trait Geographical
 {
+
+    /**
+     * Options variable used to store optional parameters set at runtime
+     * @var array
+     */
+    protected $geographical_options;
+
     /**
      * Find the distance to all the entries in your table from a particular location.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param float                                 $latitude  Latitude.
      * @param float                                 $longitude Longitude.
+     * @param array|null                            $options   (optional) Array to holds runtime options.
+     *      ['table'] string Set a table name to use instead of the default model table (this allows lat/long to be joined to the query from another table).
+     *      ['latitude_column'] string Set a column name for latitude at runtime
+     *      ['longitude_column'] string Set a column name for longitude at runtime
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeDistance(Builder $query, float $latitude, float $longitude)
+    public function scopeDistance(Builder $query, float $latitude, float $longitude, $options = [])
     {
+        $this->geographical_options = $options;
         $latName = $this->getQualifiedLatitudeColumn();
         $lonName = $this->getQualifiedLongitudeColumn();
 
@@ -75,6 +87,12 @@ trait Geographical
         return $query->havingRaw('distance BETWEEN ? AND ?', [$inner_radius, $outer_radius]);
     }
 
+    protected function getTableName(){
+        return isset($this->geographical_options['table']) ?
+            $this->geographical_options['table']
+            : $this->getTable();
+    }
+
     /**
      * Get full sql column name for latitude.
      *
@@ -82,7 +100,7 @@ trait Geographical
      */
     protected function getQualifiedLatitudeColumn()
     {
-        return $this->getConnection()->getTablePrefix() . $this->getTable() . '.' . $this->getLatitudeColumn();
+        return $this->getConnection()->getTablePrefix() . $this->getTableName() . '.' . $this->getLatitudeColumn();
     }
 
     /**
@@ -92,7 +110,7 @@ trait Geographical
      */
     protected function getQualifiedLongitudeColumn()
     {
-        return $this->getConnection()->getTablePrefix() . $this->getTable() . '.' . $this->getLongitudeColumn();
+        return $this->getConnection()->getTablePrefix() . $this->getTableName() . '.' . $this->getLongitudeColumn();
     }
 
     /**
@@ -102,7 +120,17 @@ trait Geographical
      */
     public function getLatitudeColumn()
     {
-        return defined('static::LATITUDE') ? static::LATITUDE : 'latitude';
+        if(isset($this->geographical_options['latitude_column']))
+        {
+            return $this->geographical_options['latitude_column'];
+        }
+
+        if(defined('static::LATITUDE'))
+        {
+            return static::LATITUDE;
+        }
+
+        return 'latitude';
     }
 
     /**
@@ -112,6 +140,16 @@ trait Geographical
      */
     public function getLongitudeColumn()
     {
-        return defined('static::LONGITUDE') ? static::LONGITUDE : 'longitude';
+        if(isset($this->geographical_options['longitude_column']))
+        {
+            return $this->geographical_options['longitude_column'];
+        }
+
+        if(defined('static::LONGITUDE'))
+        {
+            return static::LONGITUDE;
+        }
+
+        return 'longitude';
     }
 }
