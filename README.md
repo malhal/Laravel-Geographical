@@ -8,9 +8,18 @@ $table->double('longitude');
 $table->double('latitude');
 ```
 
-Finally in your model use:
+Finally, edit you model to use the Geographical Trait, as the example below:
 ```php
-use Geographical;
+<?php
+
+namespace App\Models;
+
+use Malhal\Geographical\Geographical;
+use Illuminate\Database\Eloquent\Model;
+
+class ModelExample extends Model
+{
+    use Geographical;
 ```
 
 ### 1. Distance
@@ -18,7 +27,7 @@ use Geographical;
 Find the distance to all the entries in your table from a particular location.
 
 ```php
-$query = Model::distance($latitude, $longitude);
+$query = ModelExample::distance($latitude, $longitude);
 $asc = $query->orderBy('distance', 'ASC')->get();
  ```
 
@@ -27,7 +36,7 @@ $asc = $query->orderBy('distance', 'ASC')->get();
 Find all the entries in your table inside a circular geo-fence.
 
 ```php
-$query = Model::geofence($latitude, $longitude, $inner_radius, $outer_radius);
+$query = ModelExample::geofence($latitude, $longitude, $inner_radius, $outer_radius);
 $all = $query->get();
 ```
 
@@ -45,7 +54,7 @@ protected static $kilometers = true;
 1. The method returns a `Eloquent\Builder` object so that you can add optional conditions if you want.
 2. If you require to select only a certain columns, it can be achieved by using `select()`.
     ```php
-    Model::select('id', 'name')->distance($latitude, $longitude);
+    ModelExample::select('id', 'name')->distance($latitude, $longitude);
     ```
     (`select()` should precede the `distance()/geofence()`)
 3. You can use `distance` as an aggregate column in the result.
